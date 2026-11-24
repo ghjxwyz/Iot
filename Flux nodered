@@ -1,0 +1,504 @@
+[
+{
+"id": "c0de0000000000c1",
+"type": "comment",
+"name": "PARTIE SANTÉ : graphiques + alarme",
+"info": "",
+"x": 180,
+"y": 420,
+"wires": []
+},
+{
+"id": "c0de0000000000a1",
+"type": "mqtt in",
+"name": "",
+"topic": "ghjxwyz/esp32/max30102/bpm",
+"qos": "0",
+"datatype": "auto-detect",
+"broker": "c0de0000000000k1",
+"nl": false,
+"rap": true,
+"rh": 0,
+"inputs": 0,
+"x": 170,
+"y": 480,
+"wires": [
+[
+"c0de0000000000b1",
+"c0de0000000000g1",
+"c0de0000000000f1",
+"c0de0000000000d9"
+]
+]
+},
+{
+"id": "c0de0000000000a2",
+"type": "mqtt in",
+"name": "",
+"topic": "ghjxwyz/esp32/max30102/spo2",
+"qos": "0",
+"datatype": "auto-detect",
+"broker": "c0de0000000000k1",
+"nl": false,
+"rap": true,
+"rh": 0,
+"inputs": 0,
+"x": 170,
+"y": 560,
+"wires": [
+[
+"c0de0000000000g2",
+"c0de0000000000f1"
+]
+]
+},
+{
+"id": "c0de0000000000a3",
+"type": "mqtt in",
+"name": "",
+"topic": "ghjxwyz/esp32/button1",
+"qos": "0",
+"datatype": "auto-detect",
+"broker": "c0de0000000000k1",
+"nl": false,
+"rap": true,
+"rh": 0,
+"inputs": 0,
+"x": 150,
+"y": 640,
+"wires": [
+[
+"c0de0000000000f1"
+]
+]
+},
+{
+"id": "c0de0000000000b1",
+"type": "ui-chart",
+"group": "",
+"name": "Graphique BPM",
+"label": "Fréquence cardiaque (BPM)",
+"order": 0,
+"chartType": "line",
+"category": "topic",
+"categoryType": "msg",
+"xAxisLabel": "",
+"xAxisProperty": "",
+"xAxisPropertyType": "timestamp",
+"xAxisType": "time",
+"xAxisFormat": "",
+"xAxisFormatType": "auto",
+"xmin": "",
+"xmax": "",
+"yAxisLabel": "",
+"yAxisProperty": "payload",
+"yAxisPropertyType": "msg",
+"ymin": "40",
+"ymax": "180",
+"bins": 10,
+"action": "append",
+"stackSeries": false,
+"pointShape": "circle",
+"pointRadius": 4,
+"showLegend": true,
+"removeOlder": 1,
+"removeOlderUnit": "3600",
+"removeOlderPoints": "",
+"colors": [
+"#0095ff",
+"#ff0000",
+"#ff7f0e",
+"#2ca02c",
+"#a347e1",
+"#d62728",
+"#ff9896",
+"#9467bd",
+"#c5b0d5"
+],
+"textColor": [
+"#666666"
+],
+"textColorDefault": true,
+"gridColor": [
+"#e5e5e5"
+],
+"gridColorDefault": true,
+"width": 6,
+"height": 8,
+"className": "",
+"interpolation": "linear",
+"x": 560,
+"y": 440,
+"wires": [
+[]
+]
+},
+{
+"id": "c0de0000000000g2",
+"type": "ui-gauge",
+"name": "Jauge SpO2",
+"group": "",
+"order": 0,
+"width": 3,
+"height": 3,
+"gtype": "gauge-34",
+"gstyle": "needle",
+"title": "Oxygène SpO2",
+"units": "%",
+"icon": "",
+"prefix": "",
+"suffix": "",
+"segments": [
+{
+"from": "80",
+"color": "#ea5353"
+},
+{
+"from": "90",
+"color": "#ffc800"
+},
+{
+"from": "95",
+"color": "#5cd65c"
+}
+],
+"min": "80",
+"max": "100",
+"sizeThickness": 16,
+"sizeGap": 4,
+"sizeKeyThickness": 8,
+"styleRounded": true,
+"styleGlow": false,
+"className": "",
+"x": 560,
+"y": 560,
+"wires": []
+},
+{
+"id": "c0de0000000000d9",
+"type": "debug",
+"name": "debug BPM",
+"active": true,
+"tosidebar": true,
+"console": false,
+"tostatus": true,
+"complete": "payload",
+"targetType": "msg",
+"statusVal": "payload",
+"statusType": "auto",
+"x": 560,
+"y": 520,
+"wires": []
+},
+{
+"id": "c0de0000000000f1",
+"type": "function",
+"name": "ALARME",
+"func": "// ============================================================\n// FONCTION ALARME\n// Entrees : ghjxwyz/esp32/max30102/bpm, ghjxwyz/esp32/max30102/spo2, ghjxwyz/esp32/button1\n// Sortie 1 : ordre LED (\"on\"/\"off\") -> ghjxwyz/esp32/output (ESP32 Pilotage)\n// Sortie 2 : texte alarme pour le dashboard\n// Sortie 3 : etat du bouton toggle pour le dashboard\n// ============================================================\n\n// 1) On memorise la derniere valeur recue de chaque topic\nif (msg.topic === \"ghjxwyz/esp32/button1\") {\n let etat = String(msg.payload); // \"down\" = appuye, \"up\" = relache\n let avant = flow.get(\"dernierEtatBouton\") || \"up\";\n flow.set(\"dernierEtatBouton\", etat);\n if (etat === \"down\" && avant === \"up\") { // a chaque nouvel appui...\n flow.set(\"surveillance\", !(flow.get(\"surveillance\") || false)); // ...on inverse ON/OFF\n }\n}\nif (msg.topic === \"ghjxwyz/esp32/max30102/bpm\") { flow.set(\"bpm\", Number(msg.payload)); }\nif (msg.topic === \"ghjxwyz/esp32/max30102/spo2\") { flow.set(\"spo2\", Number(msg.payload)); }\n\n// 2) Les seuils (tu peux les changer)\nconst SEUIL_BPM = 120; // au-dessus = danger\nconst SEUIL_SPO2 = 90; // en dessous = danger\n\n// 3) On recupere les valeurs memorisees\nlet bpm = flow.get(\"bpm\") || 0;\nlet spo2 = flow.get(\"spo2\") || 100;\nlet surveillance = flow.get(\"surveillance\") || false;\n\n// 4) La decision\nlet danger = (bpm > SEUIL_BPM) || (spo2 > 0 && spo2 < SEUIL_SPO2);\nlet alarme = surveillance && danger;\n\n// 5) Texte pour le dashboard\nlet texte;\nif (!surveillance) texte = \"⏸ Surveillance désactivée (appuie sur le bouton)\";\nelse if (alarme) texte = \"🚨 ALARME ! BPM = \" + bpm + \" | SpO2 = \" + spo2 + \" %\";\nelse texte = \"✅ Normal — BPM = \" + bpm + \" | SpO2 = \" + spo2 + \" %\";\n\n// 6) Ordre LED seulement quand l'etat de l'alarme change\n// (pour ne pas ecraser le switch du dashboard a chaque mesure)\nlet ancienne = flow.get(\"alarmeEnCours\") || false;\nflow.set(\"alarmeEnCours\", alarme);\nlet msgLed = null;\nif (alarme !== ancienne) {\n msgLed = { payload: alarme ? \"on\" : \"off\" };\n}\n\n// 7) Etat du bouton toggle pour le dashboard\nlet texteBouton = surveillance ? \"🟢 ON (surveillance activée)\" : \"⚪ OFF (surveillance coupée)\";\n\nreturn [ msgLed, { payload: texte }, { payload: texteBouton } ];\n",
+"outputs": 3,
+"timeout": 0,
+"noerr": 0,
+"initialize": "",
+"finalize": "",
+"libs": [],
+"outputLabels": [
+"LED (on/off)",
+"texte alarme",
+"état bouton"
+],
+"x": 560,
+"y": 620,
+"wires": [
+[
+"c0de0000000000e1",
+"c0de0000000000s1"
+],
+[
+"c0de0000000000e2"
+],
+[
+"c0de0000000000e3"
+]
+]
+},
+{
+"id": "c0de0000000000e1",
+"type": "mqtt out",
+"name": "LED alarme",
+"topic": "ghjxwyz/esp32/output",
+"qos": "0",
+"retain": "false",
+"respTopic": "",
+"contentType": "",
+"userProps": "",
+"correl": "",
+"expiry": "",
+"broker": "c0de0000000000k1",
+"x": 1050,
+"y": 600,
+"wires": []
+},
+{
+"id": "c0de0000000000e2",
+"type": "ui-text",
+"group": "",
+"order": 0,
+"width": 0,
+"height": 0,
+"name": "État alarme",
+"label": "État alarme",
+"format": "{{msg.payload}}",
+"layout": "row-spread",
+"style": false,
+"font": "",
+"fontSize": 16,
+"color": "#717171",
+"wrapText": true,
+"className": "",
+"x": 790,
+"y": 640,
+"wires": []
+},
+{
+"id": "c0de0000000000t1",
+"type": "inject",
+"name": "TEST BPM 130 (danger)",
+"props": [
+{
+"p": "payload"
+},
+{
+"p": "topic",
+"vt": "str"
+}
+],
+"repeat": "",
+"crontab": "",
+"once": false,
+"onceDelay": 0.1,
+"topic": "ghjxwyz/esp32/max30102/bpm",
+"payload": "130",
+"payloadType": "num",
+"x": 190,
+"y": 720,
+"wires": [
+[
+"c0de0000000000f1"
+]
+]
+},
+{
+"id": "c0de0000000000t2",
+"type": "inject",
+"name": "TEST BPM 75 (normal)",
+"props": [
+{
+"p": "payload"
+},
+{
+"p": "topic",
+"vt": "str"
+}
+],
+"repeat": "",
+"crontab": "",
+"once": false,
+"onceDelay": 0.1,
+"topic": "ghjxwyz/esp32/max30102/bpm",
+"payload": "75",
+"payloadType": "num",
+"x": 190,
+"y": 760,
+"wires": [
+[
+"c0de0000000000f1"
+]
+]
+},
+{
+"id": "c0de0000000000t3",
+"type": "inject",
+"name": "TEST bouton appuyé",
+"props": [
+{
+"p": "payload"
+},
+{
+"p": "topic",
+"vt": "str"
+}
+],
+"repeat": "",
+"crontab": "",
+"once": false,
+"onceDelay": 0.1,
+"topic": "ghjxwyz/esp32/button1",
+"payload": "down",
+"payloadType": "str",
+"x": 180,
+"y": 800,
+"wires": [
+[
+"c0de0000000000f1"
+]
+]
+},
+{
+"id": "c0de0000000000t4",
+"type": "inject",
+"name": "TEST bouton relâché",
+"props": [
+{
+"p": "payload"
+},
+{
+"p": "topic",
+"vt": "str"
+}
+],
+"repeat": "",
+"crontab": "",
+"once": false,
+"onceDelay": 0.1,
+"topic": "ghjxwyz/esp32/button1",
+"payload": "up",
+"payloadType": "str",
+"x": 180,
+"y": 840,
+"wires": [
+[
+"c0de0000000000f1"
+]
+]
+},
+{
+"id": "c0de0000000000e3",
+"type": "ui-text",
+"group": "",
+"order": 0,
+"width": 0,
+"height": 0,
+"name": "État bouton",
+"label": "Bouton toggle (ESP32 Pilotage)",
+"format": "{{msg.payload}}",
+"layout": "row-spread",
+"style": false,
+"font": "",
+"fontSize": 16,
+"color": "#717171",
+"wrapText": true,
+"className": "",
+"x": 800,
+"y": 680,
+"wires": []
+},
+{
+"id": "c0de0000000000s1",
+"type": "ui-switch",
+"group": "",
+"name": "Switch LED",
+"label": "LED Pilotage (commande manuelle)",
+"order": 0,
+"width": 0,
+"height": 0,
+"passthru": false,
+"decouple": "false",
+"topic": "topic",
+"topicType": "msg",
+"style": "",
+"className": "",
+"layout": "row-spread",
+"clickableArea": "switch",
+"onvalue": "on",
+"onvalueType": "str",
+"onicon": "",
+"oncolor": "",
+"offvalue": "off",
+"offvalueType": "str",
+"officon": "",
+"offcolor": "",
+"x": 800,
+"y": 540,
+"wires": [
+[
+"c0de0000000000e1"
+]
+]
+},
+{
+"id": "c0de0000000000g1",
+"type": "ui-gauge",
+"name": "Jauge BPM",
+"group": "",
+"order": 0,
+"width": 3,
+"height": 3,
+"gtype": "gauge-34",
+"gstyle": "needle",
+"title": "Pouls",
+"units": "BPM",
+"icon": "",
+"prefix": "",
+"suffix": "",
+"segments": [
+{
+"from": "40",
+"color": "#ffc800"
+},
+{
+"from": "50",
+"color": "#5cd65c"
+},
+{
+"from": "100",
+"color": "#ffc800"
+},
+{
+"from": "120",
+"color": "#ea5353"
+}
+],
+"min": "40",
+"max": "180",
+"sizeThickness": 16,
+"sizeGap": 4,
+"sizeKeyThickness": 8,
+"styleRounded": true,
+"styleGlow": false,
+"className": "",
+"x": 560,
+"y": 480,
+"wires": []
+},
+{
+"id": "c0de0000000000k1",
+"type": "mqtt-broker",
+"name": "EMQX public",
+"broker": "broker.emqx.io [http://broker.emqx.io/]",
+"port": "1883",
+"clientid": "",
+"autoConnect": true,
+"usetls": false,
+"protocolVersion": "4",
+"keepalive": "60",
+"cleansession": true,
+"autoUnsubscribe": true,
+"birthTopic": "",
+"birthQos": "0",
+"birthRetain": "false",
+"birthPayload": "",
+"birthMsg": {},
+"closeTopic": "",
+"closeQos": "0",
+"closeRetain": "false",
+"closePayload": "",
+"closeMsg": {},
+"willTopic": "",
+"willQos": "0",
+"willRetain": "false",
+"willPayload": "",
+"willMsg": {},
+"userProps": "",
+"sessionExpiry": ""
+}
+]
