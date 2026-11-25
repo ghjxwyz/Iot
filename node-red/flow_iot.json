@@ -1,0 +1,1366 @@
+[
+  {
+    "id": "tab_sante",
+    "type": "tab",
+    "label": "Surveillance santé",
+    "disabled": false,
+    "env": [],
+    "info": "Noeud principal (MAX30102) -> MQTT -> dashboard + alarme -> LED du noeud pilotage"
+  },
+  {
+    "id": "59d0f6c7f488ad43",
+    "type": "mqtt-broker",
+    "name": "Broker Raspberry",
+    "broker": "172.18.32.47",
+    "port": 1883,
+    "clientid": "",
+    "autoConnect": true,
+    "usetls": false,
+    "protocolVersion": 4,
+    "keepalive": 60,
+    "cleansession": true,
+    "autoUnsubscribe": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthRetain": "false",
+    "birthPayload": "",
+    "birthMsg": {},
+    "closeTopic": "",
+    "closeQos": "0",
+    "closeRetain": "false",
+    "closePayload": "",
+    "closeMsg": {},
+    "willTopic": "",
+    "willQos": "0",
+    "willRetain": "false",
+    "willPayload": "",
+    "willMsg": {},
+    "userProps": "",
+    "sessionExpiry": ""
+  },
+  {
+    "id": "795bf448bb83b6e8",
+    "type": "ui-base",
+    "name": "Surveillance santé",
+    "path": "/dashboard",
+    "appIcon": "",
+    "includeClientData": true,
+    "acceptsClientConfig": [
+      "ui-notification",
+      "ui-control"
+    ],
+    "showPathInSidebar": false,
+    "headerContent": "page",
+    "navigationStyle": "default",
+    "titleBarStyle": "default",
+    "showReconnectNotification": true,
+    "notificationDisplayTime": 1,
+    "showDisconnectNotification": true,
+    "allowInstall": false
+  },
+  {
+    "id": "c20cc05d4cc85dfb",
+    "type": "ui-theme",
+    "name": "Thème santé",
+    "colors": {
+      "surface": "#c0392b",
+      "primary": "#c0392b",
+      "bgPage": "#f4f6f8",
+      "groupBg": "#ffffff",
+      "groupOutline": "#dfe3e8"
+    },
+    "sizes": {
+      "density": "default",
+      "pagePadding": "12px",
+      "groupGap": "12px",
+      "groupBorderRadius": "8px",
+      "widgetGap": "12px"
+    }
+  },
+  {
+    "id": "4dde75a4c8091253",
+    "type": "ui-page",
+    "name": "Surveillance santé",
+    "ui": "795bf448bb83b6e8",
+    "path": "/page1",
+    "icon": "heart-pulse",
+    "layout": "grid",
+    "theme": "c20cc05d4cc85dfb",
+    "breakpoints": [
+      {
+        "name": "Default",
+        "px": "0",
+        "cols": "3"
+      },
+      {
+        "name": "Tablet",
+        "px": "576",
+        "cols": "6"
+      },
+      {
+        "name": "Small Desktop",
+        "px": "768",
+        "cols": "9"
+      },
+      {
+        "name": "Desktop",
+        "px": "1024",
+        "cols": "12"
+      }
+    ],
+    "order": 1,
+    "className": "",
+    "visible": "true",
+    "disabled": "false"
+  },
+  {
+    "id": "12a7ae44e2642693",
+    "type": "ui-group",
+    "name": "❤️ Mesures en direct",
+    "page": "4dde75a4c8091253",
+    "width": 12,
+    "height": 1,
+    "order": 1,
+    "showTitle": true,
+    "className": "",
+    "visible": "true",
+    "disabled": "false",
+    "groupType": "default"
+  },
+  {
+    "id": "grp_alarme",
+    "type": "ui-group",
+    "name": "🚨 Alarme",
+    "page": "4dde75a4c8091253",
+    "width": 6,
+    "height": 1,
+    "order": 2,
+    "showTitle": true,
+    "className": "",
+    "visible": "true",
+    "disabled": "false",
+    "groupType": "default"
+  },
+  {
+    "id": "grp_pilotage",
+    "type": "ui-group",
+    "name": "💡 Pilotage (ESP32 LED + bouton)",
+    "page": "4dde75a4c8091253",
+    "width": 6,
+    "height": 1,
+    "order": 3,
+    "showTitle": true,
+    "className": "",
+    "visible": "true",
+    "disabled": "false",
+    "groupType": "default"
+  },
+  {
+    "id": "grp_courbes",
+    "type": "ui-group",
+    "name": "📈 Historique des courbes",
+    "page": "4dde75a4c8091253",
+    "width": 12,
+    "height": 1,
+    "order": 4,
+    "showTitle": true,
+    "className": "",
+    "visible": "true",
+    "disabled": "false",
+    "groupType": "default"
+  },
+  {
+    "id": "grp_diag",
+    "type": "ui-group",
+    "name": "🛠️ Diagnostic nœud principal",
+    "page": "4dde75a4c8091253",
+    "width": 12,
+    "height": 1,
+    "order": 5,
+    "showTitle": true,
+    "className": "",
+    "visible": "true",
+    "disabled": "false",
+    "groupType": "default"
+  },
+  {
+    "id": "grp_journal",
+    "type": "ui-group",
+    "name": "📋 Journal des mesures",
+    "page": "4dde75a4c8091253",
+    "width": 12,
+    "height": 1,
+    "order": 6,
+    "showTitle": true,
+    "className": "",
+    "visible": "true",
+    "disabled": "false",
+    "groupType": "default"
+  },
+  {
+    "id": "global_cfg",
+    "type": "global-config",
+    "env": [],
+    "modules": {
+      "@flowfuse/node-red-dashboard": "1.36.1"
+    }
+  },
+  {
+    "id": "c1",
+    "type": "comment",
+    "z": "tab_sante",
+    "name": "① MESURES : principal/capteur (JSON) → jauges, courbes, alarme, journal",
+    "info": "",
+    "x": 330,
+    "y": 40,
+    "wires": []
+  },
+  {
+    "id": "in_capteur",
+    "type": "mqtt in",
+    "z": "tab_sante",
+    "name": "Mesures capteur (JSON)",
+    "topic": "principal/capteur",
+    "qos": "0",
+    "datatype": "json",
+    "broker": "59d0f6c7f488ad43",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 160,
+    "y": 120,
+    "wires": [
+      [
+        "fn_decode",
+        "dbg_capteur"
+      ]
+    ]
+  },
+  {
+    "id": "dbg_capteur",
+    "type": "debug",
+    "z": "tab_sante",
+    "name": "debug mesures",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 400,
+    "y": 60,
+    "wires": []
+  },
+  {
+    "id": "fn_decode",
+    "type": "function",
+    "z": "tab_sante",
+    "name": "Décoder la mesure",
+    "func": "// Entrée : {\"bpm\":72,\"spo2\":98,\"temp\":31.5,\"valide\":true}\nconst m = msg.payload || {};\nconst temp = (typeof m.temp === \"number\") ? Math.round(m.temp * 10) / 10 : null;\nconst versTemp = (temp !== null) ? { payload: temp } : null;\n\nif (m.valide !== true) {\n    // Mesure invalide : on n'ajoute rien aux courbes ni à l'alarme\n    return [null, null, versTemp, null, null,\n            { payload: \"⚠️ Pas de mesure : pose le doigt sur le capteur sans bouger\" }];\n}\n\nreturn [\n    { topic: \"BPM\",  payload: m.bpm },                                  // courbe + jauge BPM\n    { topic: \"SpO2\", payload: m.spo2 },                                 // courbe + jauge SpO2\n    versTemp,                                                           // jauge température\n    { topic: \"mesure\", payload: { bpm: m.bpm, spo2: m.spo2 } },         // alarme\n    { payload: { bpm: m.bpm, spo2: m.spo2, temp: temp } },              // journal\n    { payload: \"✅ Mesure valide\" }                                     // qualité du signal\n];",
+    "outputs": 6,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 420,
+    "y": 120,
+    "wires": [
+      [
+        "gauge_bpm",
+        "chart_bpm"
+      ],
+      [
+        "gauge_spo2",
+        "chart_spo2"
+      ],
+      [
+        "gauge_temp"
+      ],
+      [
+        "fn_alarme"
+      ],
+      [
+        "fn_journal"
+      ],
+      [
+        "txt_qualite"
+      ]
+    ],
+    "outputLabels": [
+      "BPM",
+      "SpO2",
+      "température",
+      "vers alarme",
+      "vers journal",
+      "qualité"
+    ]
+  },
+  {
+    "id": "gauge_bpm",
+    "type": "ui-gauge",
+    "z": "tab_sante",
+    "name": "Jauge Pouls",
+    "group": "12a7ae44e2642693",
+    "order": 1,
+    "value": "payload",
+    "valueType": "msg",
+    "width": 4,
+    "height": 4,
+    "gtype": "gauge-34",
+    "gstyle": "needle",
+    "title": "Pouls",
+    "alwaysShowTitle": true,
+    "units": "BPM",
+    "icon": "",
+    "prefix": "",
+    "suffix": "",
+    "segments": [
+      {
+        "from": "40",
+        "color": "#ffc800",
+        "text": "",
+        "textType": "label"
+      },
+      {
+        "from": "50",
+        "color": "#5cd65c",
+        "text": "",
+        "textType": "label"
+      },
+      {
+        "from": "100",
+        "color": "#ffc800",
+        "text": "",
+        "textType": "label"
+      },
+      {
+        "from": "120",
+        "color": "#ea5353",
+        "text": "",
+        "textType": "label"
+      }
+    ],
+    "min": "40",
+    "max": "180",
+    "sizeThickness": 16,
+    "sizeGap": 4,
+    "sizeKeyThickness": 8,
+    "styleRounded": true,
+    "styleGlow": false,
+    "className": "",
+    "x": 720,
+    "y": 80,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "gauge_spo2",
+    "type": "ui-gauge",
+    "z": "tab_sante",
+    "name": "Jauge SpO2",
+    "group": "12a7ae44e2642693",
+    "order": 2,
+    "value": "payload",
+    "valueType": "msg",
+    "width": 4,
+    "height": 4,
+    "gtype": "gauge-34",
+    "gstyle": "needle",
+    "title": "SpO2",
+    "alwaysShowTitle": true,
+    "units": "%",
+    "icon": "",
+    "prefix": "",
+    "suffix": "",
+    "segments": [
+      {
+        "from": "80",
+        "color": "#ea5353",
+        "text": "",
+        "textType": "label"
+      },
+      {
+        "from": "90",
+        "color": "#ffc800",
+        "text": "",
+        "textType": "label"
+      },
+      {
+        "from": "95",
+        "color": "#5cd65c",
+        "text": "",
+        "textType": "label"
+      }
+    ],
+    "min": "80",
+    "max": "100",
+    "sizeThickness": 16,
+    "sizeGap": 4,
+    "sizeKeyThickness": 8,
+    "styleRounded": true,
+    "styleGlow": false,
+    "className": "",
+    "x": 720,
+    "y": 120,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "gauge_temp",
+    "type": "ui-gauge",
+    "z": "tab_sante",
+    "name": "Jauge Température capteur",
+    "group": "12a7ae44e2642693",
+    "order": 3,
+    "value": "payload",
+    "valueType": "msg",
+    "width": 4,
+    "height": 4,
+    "gtype": "gauge-34",
+    "gstyle": "needle",
+    "title": "Température capteur",
+    "alwaysShowTitle": true,
+    "units": "°C",
+    "icon": "",
+    "prefix": "",
+    "suffix": "",
+    "segments": [
+      {
+        "from": "15",
+        "color": "#3fa9f5",
+        "text": "",
+        "textType": "label"
+      },
+      {
+        "from": "25",
+        "color": "#5cd65c",
+        "text": "",
+        "textType": "label"
+      },
+      {
+        "from": "38",
+        "color": "#ffc800",
+        "text": "",
+        "textType": "label"
+      },
+      {
+        "from": "45",
+        "color": "#ea5353",
+        "text": "",
+        "textType": "label"
+      }
+    ],
+    "min": "15",
+    "max": "50",
+    "sizeThickness": 16,
+    "sizeGap": 4,
+    "sizeKeyThickness": 8,
+    "styleRounded": true,
+    "styleGlow": false,
+    "className": "",
+    "x": 750,
+    "y": 160,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "txt_qualite",
+    "type": "ui-text",
+    "z": "tab_sante",
+    "group": "12a7ae44e2642693",
+    "order": 4,
+    "width": 12,
+    "height": 0,
+    "name": "Qualité du signal",
+    "label": "Qualité du signal",
+    "format": "{{msg.payload}}",
+    "layout": "row-spread",
+    "style": false,
+    "font": "",
+    "fontSize": 16,
+    "color": "#333333",
+    "wrapText": true,
+    "className": "",
+    "value": "payload",
+    "valueType": "msg",
+    "x": 730,
+    "y": 200,
+    "wires": []
+  },
+  {
+    "id": "chart_bpm",
+    "type": "ui-chart",
+    "z": "tab_sante",
+    "group": "grp_courbes",
+    "name": "Courbe Fréquence cardiaque (BPM)",
+    "label": "Fréquence cardiaque (BPM)",
+    "order": 1,
+    "chartType": "line",
+    "category": "topic",
+    "categoryType": "msg",
+    "xAxisLabel": "",
+    "xAxisProperty": "",
+    "xAxisPropertyType": "timestamp",
+    "xAxisType": "time",
+    "xAxisFormat": "",
+    "xAxisFormatType": "auto",
+    "xmin": "",
+    "xmax": "",
+    "yAxisLabel": "",
+    "yAxisProperty": "payload",
+    "yAxisPropertyType": "msg",
+    "ymin": "40",
+    "ymax": "180",
+    "bins": 10,
+    "action": "append",
+    "stackSeries": false,
+    "pointShape": "circle",
+    "pointRadius": 3,
+    "showLegend": false,
+    "removeOlder": 10,
+    "removeOlderUnit": "60",
+    "removeOlderPoints": "",
+    "colors": [
+      "#e74c3c",
+      "#ff0000",
+      "#ff7f0e",
+      "#2ca02c",
+      "#a347e1",
+      "#d62728",
+      "#ff9896",
+      "#9467bd",
+      "#c5b0d5"
+    ],
+    "textColor": [
+      "#666666"
+    ],
+    "textColorDefault": true,
+    "gridColor": [
+      "#e5e5e5"
+    ],
+    "gridColorDefault": true,
+    "width": 6,
+    "height": 5,
+    "className": "",
+    "interpolation": "linear",
+    "x": 740,
+    "y": 240,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "chart_spo2",
+    "type": "ui-chart",
+    "z": "tab_sante",
+    "group": "grp_courbes",
+    "name": "Courbe Oxygène SpO2 (%)",
+    "label": "Oxygène SpO2 (%)",
+    "order": 2,
+    "chartType": "line",
+    "category": "topic",
+    "categoryType": "msg",
+    "xAxisLabel": "",
+    "xAxisProperty": "",
+    "xAxisPropertyType": "timestamp",
+    "xAxisType": "time",
+    "xAxisFormat": "",
+    "xAxisFormatType": "auto",
+    "xmin": "",
+    "xmax": "",
+    "yAxisLabel": "",
+    "yAxisProperty": "payload",
+    "yAxisPropertyType": "msg",
+    "ymin": "80",
+    "ymax": "100",
+    "bins": 10,
+    "action": "append",
+    "stackSeries": false,
+    "pointShape": "circle",
+    "pointRadius": 3,
+    "showLegend": false,
+    "removeOlder": 10,
+    "removeOlderUnit": "60",
+    "removeOlderPoints": "",
+    "colors": [
+      "#0095ff",
+      "#ff0000",
+      "#ff7f0e",
+      "#2ca02c",
+      "#a347e1",
+      "#d62728",
+      "#ff9896",
+      "#9467bd",
+      "#c5b0d5"
+    ],
+    "textColor": [
+      "#666666"
+    ],
+    "textColorDefault": true,
+    "gridColor": [
+      "#e5e5e5"
+    ],
+    "gridColorDefault": true,
+    "width": 6,
+    "height": 5,
+    "className": "",
+    "interpolation": "linear",
+    "x": 730,
+    "y": 280,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "c2",
+    "type": "comment",
+    "z": "tab_sante",
+    "name": "② BOUTON du nœud pilotage : esp32/button1 (down / up)",
+    "info": "",
+    "x": 290,
+    "y": 360,
+    "wires": []
+  },
+  {
+    "id": "in_bouton",
+    "type": "mqtt in",
+    "z": "tab_sante",
+    "name": "Bouton pilotage",
+    "topic": "esp32/button1",
+    "qos": "0",
+    "datatype": "auto-detect",
+    "broker": "59d0f6c7f488ad43",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 140,
+    "y": 420,
+    "wires": [
+      [
+        "fn_bouton",
+        "fn_alarme"
+      ]
+    ]
+  },
+  {
+    "id": "fn_bouton",
+    "type": "function",
+    "z": "tab_sante",
+    "name": "État du bouton",
+    "func": "const appuye = String(msg.payload) === \"down\";\nreturn { payload: appuye ? \"🔴 Appuyé\" : \"⚪ Relâché\" };",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 400,
+    "y": 420,
+    "wires": [
+      [
+        "txt_bouton"
+      ]
+    ]
+  },
+  {
+    "id": "txt_bouton",
+    "type": "ui-text",
+    "z": "tab_sante",
+    "group": "grp_pilotage",
+    "order": 2,
+    "width": 0,
+    "height": 0,
+    "name": "Bouton physique",
+    "label": "Bouton physique",
+    "format": "{{msg.payload}}",
+    "layout": "row-spread",
+    "style": false,
+    "font": "",
+    "fontSize": 16,
+    "color": "#333333",
+    "wrapText": true,
+    "className": "",
+    "value": "payload",
+    "valueType": "msg",
+    "x": 720,
+    "y": 420,
+    "wires": []
+  },
+  {
+    "id": "c3",
+    "type": "comment",
+    "z": "tab_sante",
+    "name": "③ ALARME : surveillance (toggle bouton) + seuils réglables → dashboard + LED",
+    "info": "",
+    "x": 340,
+    "y": 500,
+    "wires": []
+  },
+  {
+    "id": "inj_init",
+    "type": "inject",
+    "z": "tab_sante",
+    "name": "Démarrage",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "1",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 130,
+    "y": 560,
+    "wires": [
+      [
+        "fn_init"
+      ]
+    ]
+  },
+  {
+    "id": "fn_init",
+    "type": "function",
+    "z": "tab_sante",
+    "name": "Valeurs par défaut",
+    "func": "flow.set(\"seuilBpm\", 120);\nflow.set(\"seuilSpo2\", 90);\nflow.set(\"surveillance\", false);\nflow.set(\"alarmeEnCours\", false);\nflow.set(\"dernierEtatBouton\", \"up\");\nreturn [ { payload: 120 }, { payload: 90 }, { topic: \"init\" } ];",
+    "outputs": 3,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 330,
+    "y": 560,
+    "wires": [
+      [
+        "sl_bpm"
+      ],
+      [
+        "sl_spo2"
+      ],
+      [
+        "fn_alarme"
+      ]
+    ]
+  },
+  {
+    "id": "sl_bpm",
+    "type": "ui-slider",
+    "z": "tab_sante",
+    "group": "grp_alarme",
+    "name": "Seuil BPM max",
+    "label": "Seuil BPM max",
+    "tooltip": "",
+    "order": 3,
+    "width": 0,
+    "height": 0,
+    "passthru": false,
+    "outs": "end",
+    "topic": "seuilBpm",
+    "topicType": "str",
+    "thumbLabel": "always",
+    "showTicks": "false",
+    "min": 60,
+    "max": 200,
+    "step": 5,
+    "className": "",
+    "iconPrepend": "",
+    "iconAppend": "",
+    "color": "",
+    "colorTrack": "",
+    "colorThumb": "",
+    "showTextField": true,
+    "x": 560,
+    "y": 540,
+    "wires": [
+      [
+        "fn_seuils"
+      ]
+    ]
+  },
+  {
+    "id": "sl_spo2",
+    "type": "ui-slider",
+    "z": "tab_sante",
+    "group": "grp_alarme",
+    "name": "Seuil SpO2 min (%)",
+    "label": "Seuil SpO2 min (%)",
+    "tooltip": "",
+    "order": 4,
+    "width": 0,
+    "height": 0,
+    "passthru": false,
+    "outs": "end",
+    "topic": "seuilSpo2",
+    "topicType": "str",
+    "thumbLabel": "always",
+    "showTicks": "false",
+    "min": 80,
+    "max": 100,
+    "step": 1,
+    "className": "",
+    "iconPrepend": "",
+    "iconAppend": "",
+    "color": "",
+    "colorTrack": "",
+    "colorThumb": "",
+    "showTextField": true,
+    "x": 570,
+    "y": 580,
+    "wires": [
+      [
+        "fn_seuils"
+      ]
+    ]
+  },
+  {
+    "id": "fn_seuils",
+    "type": "function",
+    "z": "tab_sante",
+    "name": "Mémoriser le seuil",
+    "func": "flow.set(msg.topic, Number(msg.payload));\nreturn { topic: \"recalc\" };",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 790,
+    "y": 560,
+    "wires": [
+      [
+        "fn_alarme"
+      ]
+    ]
+  },
+  {
+    "id": "t1",
+    "type": "inject",
+    "z": "tab_sante",
+    "name": "TEST mesure normale",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "1",
+    "topic": "principal/capteur",
+    "payload": "{\"bpm\":75,\"spo2\":98,\"temp\":31.2,\"valide\":true}",
+    "payloadType": "json",
+    "x": 160,
+    "y": 640,
+    "wires": [
+      [
+        "fn_decode"
+      ]
+    ]
+  },
+  {
+    "id": "t2",
+    "type": "inject",
+    "z": "tab_sante",
+    "name": "TEST pouls trop haut (130)",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "1",
+    "topic": "principal/capteur",
+    "payload": "{\"bpm\":130,\"spo2\":97,\"temp\":31.5,\"valide\":true}",
+    "payloadType": "json",
+    "x": 180,
+    "y": 680,
+    "wires": [
+      [
+        "fn_decode"
+      ]
+    ]
+  },
+  {
+    "id": "t3",
+    "type": "inject",
+    "z": "tab_sante",
+    "name": "TEST SpO2 trop basse (85)",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "1",
+    "topic": "principal/capteur",
+    "payload": "{\"bpm\":80,\"spo2\":85,\"temp\":31.4,\"valide\":true}",
+    "payloadType": "json",
+    "x": 180,
+    "y": 720,
+    "wires": [
+      [
+        "fn_decode"
+      ]
+    ]
+  },
+  {
+    "id": "t4",
+    "type": "inject",
+    "z": "tab_sante",
+    "name": "TEST bouton appuyé",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "1",
+    "topic": "esp32/button1",
+    "payload": "down",
+    "payloadType": "str",
+    "x": 150,
+    "y": 760,
+    "wires": [
+      [
+        "fn_alarme",
+        "fn_bouton"
+      ]
+    ]
+  },
+  {
+    "id": "t5",
+    "type": "inject",
+    "z": "tab_sante",
+    "name": "TEST bouton relâché",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": "1",
+    "topic": "esp32/button1",
+    "payload": "up",
+    "payloadType": "str",
+    "x": 150,
+    "y": 800,
+    "wires": [
+      [
+        "fn_alarme",
+        "fn_bouton"
+      ]
+    ]
+  },
+  {
+    "id": "fn_alarme",
+    "type": "function",
+    "z": "tab_sante",
+    "name": "ALARME",
+    "func": "// ============================================================\n// FONCTION ALARME\n// Entrées : \"mesure\" (bpm/spo2), \"esp32/button1\", \"recalc\" (seuils), \"init\"\n// Sortie 1 : \"on\"/\"off\" -> esp32/alarme (la LED du pilotage clignote)\n// Sortie 2 : texte de l'état de l'alarme\n// Sortie 3 : texte de l'état de la surveillance (toggle du bouton)\n// Sortie 4 : notification pop-up quand l'alarme se déclenche\n// ============================================================\n\n// 1) Bouton : chaque nouvel appui inverse la surveillance ON/OFF\nif (msg.topic === \"esp32/button1\") {\n    const etat = String(msg.payload);                  // \"down\" = appuyé, \"up\" = relâché\n    const avant = flow.get(\"dernierEtatBouton\") || \"up\";\n    flow.set(\"dernierEtatBouton\", etat);\n    if (etat === \"down\" && avant === \"up\") {\n        flow.set(\"surveillance\", !(flow.get(\"surveillance\") || false));\n    }\n}\n\n// 2) Nouvelle mesure\nif (msg.topic === \"mesure\") {\n    flow.set(\"bpm\", msg.payload.bpm);\n    flow.set(\"spo2\", msg.payload.spo2);\n}\n\n// 3) Seuils (réglables avec les curseurs du dashboard)\nconst SEUIL_BPM  = flow.get(\"seuilBpm\")  || 120;   // au-dessus = danger\nconst SEUIL_SPO2 = flow.get(\"seuilSpo2\") || 90;    // en dessous = danger\n\nconst bpm  = flow.get(\"bpm\");\nconst spo2 = flow.get(\"spo2\");\nconst surveillance = flow.get(\"surveillance\") || false;\nconst aDesMesures = (typeof bpm === \"number\" && typeof spo2 === \"number\");\n\n// 4) La décision\nlet raison = \"\";\nif (aDesMesures && bpm > SEUIL_BPM)   raison = \"pouls trop haut (\" + bpm + \" > \" + SEUIL_BPM + \" BPM)\";\nif (aDesMesures && spo2 < SEUIL_SPO2) raison = \"oxygène trop bas (\" + spo2 + \" < \" + SEUIL_SPO2 + \" %)\";\nconst danger = raison !== \"\";\nconst alarme = surveillance && danger;\n\n// 5) Texte pour le dashboard\nlet texte;\nif (!surveillance)     texte = \"⏸ Surveillance désactivée (appuie sur le bouton)\";\nelse if (!aDesMesures) texte = \"⏳ Surveillance active, en attente de mesures\";\nelse if (alarme)       texte = \"🚨 ALARME : \" + raison;\nelse                   texte = \"✅ Normal (BPM \" + bpm + \" | SpO2 \" + spo2 + \" %)\";\n\nconst texteSurveillance = surveillance ? \"🟢 ON (surveillance activée)\" : \"⚪ OFF (surveillance coupée)\";\n\n// 6) Ordre à la LED seulement quand l'état de l'alarme change\nconst ancienne = flow.get(\"alarmeEnCours\") || false;\nflow.set(\"alarmeEnCours\", alarme);\nconst versLed = (alarme !== ancienne || msg.topic === \"init\") ? { payload: alarme ? \"on\" : \"off\" } : null;\nconst versNotif = (alarme && !ancienne) ? { payload: \"🚨 ALARME : \" + raison } : null;\n\nnode.status({ fill: alarme ? \"red\" : (surveillance ? \"green\" : \"grey\"), shape: \"dot\",\n              text: alarme ? \"ALARME\" : (surveillance ? \"surveillance ON\" : \"surveillance OFF\") });\n\nreturn [ versLed, { payload: texte }, { payload: texteSurveillance }, versNotif ];",
+    "outputs": 4,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1000,
+    "y": 640,
+    "wires": [
+      [
+        "out_alarme"
+      ],
+      [
+        "txt_alarme"
+      ],
+      [
+        "txt_surveillance"
+      ],
+      [
+        "notif"
+      ]
+    ],
+    "outputLabels": [
+      "LED alarme",
+      "texte alarme",
+      "surveillance",
+      "notification"
+    ]
+  },
+  {
+    "id": "out_alarme",
+    "type": "mqtt out",
+    "z": "tab_sante",
+    "name": "LED alarme → esp32/alarme",
+    "topic": "esp32/alarme",
+    "qos": "1",
+    "retain": "true",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "59d0f6c7f488ad43",
+    "x": 1270,
+    "y": 580,
+    "wires": []
+  },
+  {
+    "id": "txt_alarme",
+    "type": "ui-text",
+    "z": "tab_sante",
+    "group": "grp_alarme",
+    "order": 1,
+    "width": 0,
+    "height": 0,
+    "name": "État de l'alarme",
+    "label": "État de l'alarme",
+    "format": "{{msg.payload}}",
+    "layout": "row-spread",
+    "style": false,
+    "font": "",
+    "fontSize": 16,
+    "color": "#333333",
+    "wrapText": true,
+    "className": "",
+    "value": "payload",
+    "valueType": "msg",
+    "x": 1260,
+    "y": 620,
+    "wires": []
+  },
+  {
+    "id": "txt_surveillance",
+    "type": "ui-text",
+    "z": "tab_sante",
+    "group": "grp_alarme",
+    "order": 2,
+    "width": 0,
+    "height": 0,
+    "name": "Surveillance (bouton)",
+    "label": "Surveillance (bouton)",
+    "format": "{{msg.payload}}",
+    "layout": "row-spread",
+    "style": false,
+    "font": "",
+    "fontSize": 16,
+    "color": "#333333",
+    "wrapText": true,
+    "className": "",
+    "value": "payload",
+    "valueType": "msg",
+    "x": 1270,
+    "y": 660,
+    "wires": []
+  },
+  {
+    "id": "notif",
+    "type": "ui-notification",
+    "z": "tab_sante",
+    "ui": "795bf448bb83b6e8",
+    "position": "top right",
+    "colorDefault": false,
+    "color": "#c0392b",
+    "displayTime": "6",
+    "showCountdown": true,
+    "outputs": 0,
+    "allowDismiss": true,
+    "dismissText": "Fermer",
+    "allowConfirm": false,
+    "confirmText": "OK",
+    "raw": false,
+    "className": "",
+    "name": "Pop-up alarme",
+    "x": 1250,
+    "y": 700,
+    "wires": []
+  },
+  {
+    "id": "c4",
+    "type": "comment",
+    "z": "tab_sante",
+    "name": "④ LED : commande manuelle depuis le dashboard",
+    "info": "",
+    "x": 230,
+    "y": 880,
+    "wires": []
+  },
+  {
+    "id": "sw_led",
+    "type": "ui-switch",
+    "z": "tab_sante",
+    "name": "Switch LED",
+    "label": "LED (commande manuelle)",
+    "group": "grp_pilotage",
+    "order": 1,
+    "width": 0,
+    "height": 0,
+    "passthru": false,
+    "decouple": false,
+    "topic": "topic",
+    "topicType": "msg",
+    "style": "",
+    "className": "",
+    "layout": "row-spread",
+    "clickableArea": "switch",
+    "onvalue": "on",
+    "onvalueType": "str",
+    "onicon": "",
+    "oncolor": "",
+    "offvalue": "off",
+    "offvalueType": "str",
+    "officon": "",
+    "offcolor": "",
+    "x": 150,
+    "y": 940,
+    "wires": [
+      [
+        "out_led"
+      ]
+    ]
+  },
+  {
+    "id": "out_led",
+    "type": "mqtt out",
+    "z": "tab_sante",
+    "name": "LED manuelle → esp32/output",
+    "topic": "esp32/output",
+    "qos": "1",
+    "retain": "false",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "59d0f6c7f488ad43",
+    "x": 420,
+    "y": 940,
+    "wires": []
+  },
+  {
+    "id": "c5",
+    "type": "comment",
+    "z": "tab_sante",
+    "name": "⑤ DIAGNOSTIC : principal/statut (JSON + Last Will)",
+    "info": "",
+    "x": 250,
+    "y": 1020,
+    "wires": []
+  },
+  {
+    "id": "in_statut",
+    "type": "mqtt in",
+    "z": "tab_sante",
+    "name": "Statut principal (JSON)",
+    "topic": "principal/statut",
+    "qos": "0",
+    "datatype": "json",
+    "broker": "59d0f6c7f488ad43",
+    "nl": false,
+    "rap": true,
+    "rh": 0,
+    "inputs": 0,
+    "x": 160,
+    "y": 1080,
+    "wires": [
+      [
+        "fn_statut"
+      ]
+    ]
+  },
+  {
+    "id": "fn_statut",
+    "type": "function",
+    "z": "tab_sante",
+    "name": "Formater le diagnostic",
+    "func": "// Entrée : {\"code\":0,\"message\":\"...\",\"rssi\":-60,\"heap\":200000,\"uptime\":120}\n//          {\"code\":-1,...} si le nœud principal a disparu (Last Will)\nconst s = msg.payload || {};\nif (s.code === -1) {\n    return [ { payload: \"🔴 HORS LIGNE (plus de nouvelles du nœud principal)\" }, { payload: \"--\" } ];\n}\nconst icone = (s.code === 0) ? \"🟢\" : \"🟠\";\nconst etat = icone + \" [\" + s.code + \"] \" + s.message;\n\nlet details = \"--\";\nif (s.rssi !== undefined) {\n    const min = Math.floor(s.uptime / 60), sec = s.uptime % 60;\n    details = \"WiFi \" + s.rssi + \" dBm | RAM libre \" + Math.round(s.heap / 1024) +\n              \" ko | allumé depuis \" + min + \" min \" + sec + \" s\";\n}\nreturn [ { payload: etat }, { payload: details } ];",
+    "outputs": 2,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 410,
+    "y": 1080,
+    "wires": [
+      [
+        "txt_statut"
+      ],
+      [
+        "txt_details"
+      ]
+    ]
+  },
+  {
+    "id": "txt_statut",
+    "type": "ui-text",
+    "z": "tab_sante",
+    "group": "grp_diag",
+    "order": 1,
+    "width": 12,
+    "height": 0,
+    "name": "État",
+    "label": "État",
+    "format": "{{msg.payload}}",
+    "layout": "row-spread",
+    "style": false,
+    "font": "",
+    "fontSize": 16,
+    "color": "#333333",
+    "wrapText": true,
+    "className": "",
+    "value": "payload",
+    "valueType": "msg",
+    "x": 690,
+    "y": 1060,
+    "wires": []
+  },
+  {
+    "id": "txt_details",
+    "type": "ui-text",
+    "z": "tab_sante",
+    "group": "grp_diag",
+    "order": 2,
+    "width": 12,
+    "height": 0,
+    "name": "Détails",
+    "label": "Détails",
+    "format": "{{msg.payload}}",
+    "layout": "row-spread",
+    "style": false,
+    "font": "",
+    "fontSize": 16,
+    "color": "#333333",
+    "wrapText": true,
+    "className": "",
+    "value": "payload",
+    "valueType": "msg",
+    "x": 700,
+    "y": 1100,
+    "wires": []
+  },
+  {
+    "id": "c6",
+    "type": "comment",
+    "z": "tab_sante",
+    "name": "⑥ JOURNAL : tableau des 20 dernières mesures + fichier CSV",
+    "info": "",
+    "x": 270,
+    "y": 1180,
+    "wires": []
+  },
+  {
+    "id": "fn_journal",
+    "type": "function",
+    "z": "tab_sante",
+    "name": "Journal des mesures",
+    "func": "// Garde les 20 dernières mesures valides pour le tableau,\n// et ajoute chaque mesure au fichier CSV.\nconst m = msg.payload;\nconst maintenant = new Date();\nconst alarme = flow.get(\"alarmeEnCours\") ? \"🚨 OUI\" : \"✅ non\";\n\nconst ligne = {\n    \"Heure\": maintenant.toLocaleTimeString(\"fr-FR\"),\n    \"Pouls (BPM)\": m.bpm,\n    \"SpO2 (%)\": m.spo2,\n    \"Température (°C)\": (m.temp !== null) ? m.temp : \"--\",\n    \"Alarme\": alarme\n};\n\nlet journal = flow.get(\"journal\") || [];\njournal.unshift(ligne);                  // la plus récente en haut\njournal = journal.slice(0, 20);\nflow.set(\"journal\", journal);\n\n// date;bpm;spo2;temperature;alarme (s'ouvre directement dans Excel)\nconst csv = maintenant.toLocaleString(\"fr-FR\") + \";\" + m.bpm + \";\" + m.spo2 + \";\" +\n            ((m.temp !== null) ? String(m.temp).replace(\".\", \",\") : \"\") + \";\" +\n            (flow.get(\"alarmeEnCours\") ? 1 : 0);\n\nreturn [ { payload: journal }, { payload: csv } ];",
+    "outputs": 2,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 410,
+    "y": 1240,
+    "wires": [
+      [
+        "table_journal"
+      ],
+      [
+        "file_journal"
+      ]
+    ],
+    "outputLabels": [
+      "tableau",
+      "fichier CSV"
+    ]
+  },
+  {
+    "id": "table_journal",
+    "type": "ui-table",
+    "z": "tab_sante",
+    "group": "grp_journal",
+    "name": "Tableau journal",
+    "label": "",
+    "order": 1,
+    "width": 0,
+    "height": 0,
+    "maxrows": 0,
+    "passthru": false,
+    "autocols": true,
+    "showSearch": false,
+    "deselect": true,
+    "selectionType": "none",
+    "columns": [],
+    "mobileBreakpoint": "sm",
+    "mobileBreakpointType": "defaults",
+    "action": "replace",
+    "x": 670,
+    "y": 1220,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "file_journal",
+    "type": "file",
+    "z": "tab_sante",
+    "name": "C:\\Users\\Public\\journal_mesures.csv",
+    "filename": "C:\\Users\\Public\\journal_mesures.csv",
+    "filenameType": "str",
+    "appendNewline": true,
+    "createDir": true,
+    "overwriteFile": "false",
+    "encoding": "utf8",
+    "x": 720,
+    "y": 1260,
+    "wires": [
+      []
+    ]
+  }
+]
